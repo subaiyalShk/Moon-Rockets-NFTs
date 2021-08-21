@@ -39,12 +39,19 @@ function App() {
 
   async function getBalance() {
     // First checks if we have an ethereum wallet (Metamask) attached to the browser
+    
     if (typeof window.ethereum !== 'undefined') {
       const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' })
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(SHKTokenAddress, SHKToken.abi, provider) 
-      const balance = await contract.balanceOf(account);
-      console.log("Balance: ", balance.toString());
+      const { chainId } = await provider.getNetwork()
+      console.log(chainId)
+      if (chainId==3){
+        const contract = new ethers.Contract(SHKTokenAddress, SHKToken.abi, provider) 
+        const balance = await contract.balanceOf(account);
+        console.log("Balance: ", balance.toString());
+      }else{
+        console.log("switch network in metamask")
+      }
     }
   }
 
