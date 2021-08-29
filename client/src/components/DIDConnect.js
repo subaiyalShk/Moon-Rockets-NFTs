@@ -6,8 +6,10 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect'
 import { DID } from 'dids'
 import { IDX } from '@ceramicstudio/idx'
+import { id } from '@ethersproject/hash'
 
-const endpoint = "https://ceramic-clay.3boxlabs.com"
+// connects to test network 
+const endpoint = "https://ceramic-clay.3boxlabs.com/"
 
 function DIDConnect() {
   const [name, setName] = useState('')
@@ -23,13 +25,18 @@ function DIDConnect() {
 
   async function readProfile() {
     const [address] = await connect()
+    // Ceramic client
     const ceramic = new CeramicClient(endpoint)
+    // IDX instance
     const idx = new IDX({ ceramic })
+    // console.log(ceramic)
+    // console.log(idx)
+
 
     try {
       const data = await idx.get(
         'basicProfile',
-        `${address}@eip155:1`
+        `${address}@eip155:3`
       )
       console.log('data: ', data)
       if (data.name) setName(data.name)
